@@ -1,8 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+
+interface AuthUser {
+  userId: number;
+  email: string;
+  name?: string;
+  avatar?: string;
+  plan: string;
+  credits: {
+    total: number;
+    expiring: number;
+    expiresAt: string | null;
+  };
+}
 
 const navLinks = [
   { label: "How It Works", href: "/#how-it-works" },
@@ -13,6 +26,39 @@ const navLinks = [
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUser = () => {
+      fetch("/api/auth/me", { credentials: "include" })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success && data.data) {
+            setUser(data.data);
+          } else {
+            setUser(null);
+          }
+        })
+        .catch(() => setUser(null))
+        .finally(() => setLoading(false));
+    };
+
+    fetchUser();
+
+    // Listen for credit usage events to refresh
+    window.addEventListener('credit-used', fetchUser);
+    return () => window.removeEventListener('credit-used', fetchUser);
+  }, []);
+
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+    setUser(null);
+    window.location.reload();
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-[100]">
@@ -43,12 +89,43 @@ export default function Header() {
               {link.label}
             </Link>
           ))}
-          <Link
-            href="/login"
-            className="text-sm font-medium px-6 py-2.5 border border-[rgba(245,240,232,0.08)] rounded-full text-[#f5f0e8] hover:border-[#d4a853] hover:text-[#d4a853] transition-all duration-200"
-          >
-            Log in
-          </Link>
+
+          {user ? (
+            <div className="flex items-center gap-4">
+              <span className="text-xs text-[#d4a853] font-medium">
+                {user.credits?.total ?? 0} credits
+              </span>
+              <div className="flex items-center gap-2">
+                {user.avatar ? (
+                  <img
+                    src={user.avatar}
+                    alt={user.name || user.email}
+                    className="w-7 h-7 rounded-full"
+                  />
+                ) : (
+                  <div className="w-7 h-7 rounded-full bg-[#d4a853] text-[#0c0c0e] flex items-center justify-center text-xs font-bold">
+                    {(user.name || user.email).charAt(0).toUpperCase()}
+                  </div>
+                )}
+                <span className="text-sm text-[#f5f0e8]">
+                  {user.name || user.email.split("@")[0]}
+                </span>
+              </div>
+              <button
+                onClick={handleLogout}
+                className="text-sm font-medium px-4 py-2 border border-[rgba(245,240,232,0.08)] rounded-full text-[#a09b94] hover:border-[#d4a853] hover:text-[#d4a853] transition-all duration-200"
+              >
+                Log out
+              </button>
+            </div>
+          ) : (
+            <a
+              href="/api/auth/login?returnTo=/"
+              className="text-sm font-medium px-6 py-2.5 border border-[rgba(245,240,232,0.08)] rounded-full text-[#f5f0e8] hover:border-[#d4a853] hover:text-[#d4a853] transition-all duration-200"
+            >
+              Log in
+            </a>
+          )}
         </nav>
 
         {/* Mobile hamburger */}
@@ -74,13 +151,30 @@ export default function Header() {
               {link.label}
             </Link>
           ))}
-          <Link
-            href="/login"
-            onClick={() => setOpen(false)}
-            className="text-sm font-medium px-6 py-2.5 border border-[rgba(245,240,232,0.08)] rounded-full text-[#f5f0e8] hover:border-[#d4a853] hover:text-[#d4a853] transition-all duration-200 text-center mt-2"
-          >
-            Log in
-          </Link>
+          {user ? (
+            <>
+              <span className="text-sm text-[#d4a853]">
+                {user.credits?.total ?? 0} credits
+              </span>
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  handleLogout();
+                }}
+                className="text-sm font-medium px-6 py-2.5 border border-[rgba(245,240,232,0.08)] rounded-full text-[#f5f0e8] hover:border-[#d4a853] hover:text-[#d4a853] transition-all duration-200 text-center mt-2"
+              >
+                Log out
+              </button>
+            </>
+          ) : (
+            <a
+              href="/api/auth/login?returnTo=/"
+              onClick={() => setOpen(false)}
+              className="text-sm font-medium px-6 py-2.5 border border-[rgba(245,240,232,0.08)] rounded-full text-[#f5f0e8] hover:border-[#d4a853] hover:text-[#d4a853] transition-all duration-200 text-center mt-2"
+            >
+              Log in
+            </a>
+          )}
         </div>
       )}
     </header>
