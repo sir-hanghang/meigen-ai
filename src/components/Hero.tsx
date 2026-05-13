@@ -261,7 +261,7 @@ export default function Hero() {
                 aria-current={isCurrent ? "step" : undefined}
                 className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm transition-all ${
                   isCurrent
-                    ? "bg-[#d4a853] text-[#0c0c0e] ring-2 ring-[#e55b5b] ring-offset-4 ring-offset-[#0c0c0e]"
+                    ? "bg-[#d4a853] text-[#0c0c0e] shadow-[0_0_24px_rgba(212,168,83,0.18)]"
                     : isCompleted
                       ? "bg-[#141416] text-[#d4a853] border border-[rgba(212,168,83,0.45)]"
                       : "bg-[#1a1a1c] text-[#6b6560] border border-[rgba(245,240,232,0.08)]"
