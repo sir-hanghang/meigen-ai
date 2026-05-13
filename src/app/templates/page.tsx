@@ -6,11 +6,11 @@ import TemplateGallery from "@/components/TemplateGallery";
 export const metadata: Metadata = {
   title: "Quote Card Templates",
   description:
-    "Browse 20+ brand-ready quote card templates. Instagram, X, LinkedIn, newsletter sizes. Customize with your logo and colors in one click.",
+    "Browse 8 brand-ready quote card templates. Instagram, X, LinkedIn, newsletter sizes. Customize with your logo and colors in one click.",
   openGraph: {
     title: "Quote Card Templates — Meigen AI",
     description:
-      "Browse 20+ brand-ready quote card templates. Instagram, X, LinkedIn, newsletter sizes.",
+      "Browse 8 brand-ready quote card templates. Instagram, X, LinkedIn, newsletter sizes.",
   },
 };
 

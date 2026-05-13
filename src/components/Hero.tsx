@@ -6,6 +6,13 @@ interface Template {
   id: string;
   name: string;
   category: string;
+  description?: string;
+  previewQuote?: string;
+  previewAuthor?: string;
+  sizes?: string;
+  background?: { from: string; to: string };
+  textColor?: string;
+  accentColor?: string;
 }
 
 const SIZES = [
@@ -15,7 +22,7 @@ const SIZES = [
   { id: "16:9", name: "Landscape", desc: "Twitter / LinkedIn" },
 ];
 
-const CATEGORIES = ["All", "Minimal", "Editorial", "Bold", "Elegant", "Nature"];
+const CATEGORIES = ["All", "Minimal", "Editorial", "Bold", "Elegant"];
 
 export default function Hero() {
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -57,7 +64,22 @@ export default function Hero() {
     }
   }, [activeCategory, templates]);
 
-  // Step 1: Generate quote
+  // Render a quote card without changing the generated text.
+  const renderQuoteCard = useCallback(async (quote: string, author: string, templateId: string, size: string) => {
+    const res = await fetch("/api/render", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ quote, author, templateId, size }),
+    });
+
+    const data = await res.json();
+    if (!data.success) {
+      throw new Error(data.error?.message || "Render failed");
+    }
+    return data.data.dataUrl as string;
+  }, []);
+
+  // Step 1: Generate quote, then immediately render it with the default template.
   const handleGenerate = async () => {
     if (!topic.trim()) return;
     setLoading(true);
@@ -84,13 +106,16 @@ export default function Hero() {
         return;
       }
 
+      const svg = await renderQuoteCard(data.data.quote, data.data.author, selectedTemplate, selectedSize);
+
       setResult({
         quote: data.data.quote,
         author: data.data.author,
         imageUrl: data.data.imageUrl,
         jobId: data.data.jobId,
+        svg,
       });
-      setStep(2);
+      setStep(3);
       // Trigger credit refresh across the app
       window.dispatchEvent(new Event('credit-used'));
     } catch (err) {
@@ -107,28 +132,29 @@ export default function Hero() {
     setError("");
 
     try {
-      const res = await fetch("/api/render", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          quote: result.quote,
-          author: result.author,
-          templateId: selectedTemplate,
-          size: selectedSize,
-        }),
-      });
-
-      const data = await res.json();
-      if (!data.success) {
-        setError(data.error?.message || "Render failed");
-        setLoading(false);
-        return;
-      }
-
-      setResult((prev) => (prev ? { ...prev, svg: data.data.dataUrl } : null));
+      const svg = await renderQuoteCard(result.quote, result.author, selectedTemplate, selectedSize);
+      setResult((prev) => (prev ? { ...prev, svg } : null));
       setStep(3);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Network error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const applyTemplate = async (templateId: string, size = selectedSize) => {
+    if (!result) return;
+    setSelectedTemplate(templateId);
+    setSelectedSize(size);
+    setLoading(true);
+    setError("");
+
+    try {
+      const svg = await renderQuoteCard(result.quote, result.author, templateId, size);
+      setResult((prev) => (prev ? { ...prev, svg } : null));
+      setStep(3);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Render failed");
     } finally {
       setLoading(false);
     }
@@ -371,6 +397,55 @@ export default function Hero() {
               className="w-full h-auto rounded-xl"
             />
           </div>
+
+          {/* Template switcher */}
+          <div className="mb-6 text-left">
+            <p className="text-sm text-[#a09b94] mb-3">
+              Switch template — the generated quote stays the same
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {templates.map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => applyTemplate(t.id)}
+                  disabled={loading}
+                  className={`p-3 rounded-xl border text-left transition-all ${
+                    selectedTemplate === t.id
+                      ? "border-[#d4a853] bg-[rgba(212,168,83,0.08)]"
+                      : "border-[rgba(245,240,232,0.08)] bg-[#141416] hover:border-[rgba(245,240,232,0.15)]"
+                  } disabled:opacity-60`}
+                >
+                  <p className="text-[#f5f0e8] text-xs font-semibold truncate">{t.name}</p>
+                  <p className="text-[#6b6560] text-[10px] mt-1">{t.category}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Size switcher */}
+          <div className="mb-6 text-left">
+            <p className="text-sm text-[#a09b94] mb-3">Export size</p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {SIZES.map((s) => (
+                <button
+                  key={s.id}
+                  onClick={() => applyTemplate(selectedTemplate, s.id)}
+                  disabled={loading}
+                  className={`p-3 rounded-xl border text-left transition-all ${
+                    selectedSize === s.id
+                      ? "border-[#d4a853] bg-[rgba(212,168,83,0.08)]"
+                      : "border-[rgba(245,240,232,0.08)] bg-[#141416] hover:border-[rgba(245,240,232,0.15)]"
+                  } disabled:opacity-60`}
+                >
+                  <p className="text-[#f5f0e8] text-xs font-semibold">{s.name}</p>
+                  <p className="text-[#6b6560] text-[10px] mt-1">{s.id}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {loading && <p className="text-sm text-[#d4a853] mb-4">Applying template...</p>}
+          {error && <p className="text-sm text-red-400 mb-4">{error}</p>}
 
           {/* Download options */}
           <div className="grid grid-cols-3 gap-4 mb-6">
