@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Cookie Policy",
-  description: "Cookie Policy for Meigen AI.",
+  title: "Meigen AI Cookie Policy and Tracking Choices",
+  description:
+    "Review the Meigen AI cookie policy to understand essential, preference, and analytics cookies, plus browser controls for managing tracking choices.",
 };
 
 export default function CookiePolicy() {
@@ -15,6 +16,12 @@ export default function CookiePolicy() {
         </Link>
         <h1 className="font-[family-name:var(--font-display)] text-4xl md:text-5xl font-semibold mb-8">Cookie Policy</h1>
         <p className="text-[#a09b94] mb-12">Last updated: May 12, 2026</p>
+        <p className="text-[#a09b94] leading-relaxed mb-10">
+          Meigen AI uses essential, preference, and analytics files to keep the
+          site working, remember choices, and understand product usage. Browser
+          controls let you manage tracking choices before using quote generation
+          features.
+        </p>
         <div className="space-y-10 text-[#a09b94] leading-relaxed">
           <section>
             <h2 className="text-xl font-semibold text-[#f5f0e8] mb-4">1. What Are Cookies</h2>

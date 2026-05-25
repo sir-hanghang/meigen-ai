@@ -5,11 +5,11 @@ import Analytics from "@/components/Analytics";
 export const metadata: Metadata = {
   metadataBase: new URL("https://meigenai.org"),
   title: {
-    default: "Meigen AI — AI Quote Studio",
-    template: "%s | Meigen AI",
+    default: "AI Quote Generator for Branded Cards | Meigen AI",
+    template: "%s",
   },
   description:
-    "Generate original quotes and turn them into brand-ready visual cards with Meigen AI. 20+ templates, batch export, multi-platform sizes. Free to try.",
+    "Use Meigen AI as an AI quote generator to create original quotes, design branded quote cards, and export social-ready visuals in minutes today.",
   keywords: [
     "meigen ai",
     "AI quote generator",
@@ -23,9 +23,9 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://meigenai.org",
     siteName: "Meigen AI",
-    title: "Meigen AI — AI Quote Studio",
+    title: "AI Quote Generator for Branded Cards | Meigen AI",
     description:
-      "Generate original quotes and turn them into brand-ready visual cards with Meigen AI. 20+ templates, batch export, multi-platform sizes. Free to try.",
+      "Use Meigen AI as an AI quote generator to create original quotes, design branded quote cards, and export social-ready visuals in minutes today.",
     images: [
       {
         url: "/og-image.jpg",
@@ -37,9 +37,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Meigen AI — AI Quote Studio",
+    title: "AI Quote Generator for Branded Cards | Meigen AI",
     description:
-      "Generate original quotes and turn them into brand-ready visual cards with Meigen AI. 20+ templates, batch export, multi-platform sizes. Free to try.",
+      "Use Meigen AI as an AI quote generator to create original quotes, design branded quote cards, and export social-ready visuals in minutes today.",
     images: ["/og-image.jpg"],
   },
   robots: {

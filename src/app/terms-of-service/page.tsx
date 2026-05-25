@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Terms of Service",
+  title: "Meigen AI Terms of Service for Quote Tools",
   description:
-    "Terms of Service for Meigen AI. Read the rules and guidelines for using our platform.",
+    "Review the Meigen AI terms of service for account rules, acceptable use, quote card ownership, subscriptions, cancellations, and user responsibilities.",
 };
 
 export default function TermsOfService() {
@@ -21,6 +21,12 @@ export default function TermsOfService() {
           Terms of Service
         </h1>
         <p className="text-[#a09b94] mb-12">Last updated: May 12, 2026</p>
+        <p className="text-[#a09b94] leading-relaxed mb-10">
+          These terms of service explain the rules for using Meigen AI, including
+          account access, acceptable use, generated quote ownership, subscription
+          limits, and cancellation obligations. Review the terms of service
+          before creating, exporting, or publishing quote cards.
+        </p>
 
         <div className="space-y-10 text-[#a09b94] leading-relaxed">
           <section>

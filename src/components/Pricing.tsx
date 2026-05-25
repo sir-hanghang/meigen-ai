@@ -77,7 +77,7 @@ export default function Pricing() {
 
   const handleCheckout = async (plan: string, amount: string) => {
     if (!user) {
-      window.location.href = `/api/auth/login?returnTo=${encodeURIComponent("/#pricing")}`;
+      window.location.assign(`/api/auth/login?returnTo=${encodeURIComponent("/#pricing")}`);
       return;
     }
 
@@ -92,7 +92,7 @@ export default function Pricing() {
 
       const data = await res.json();
       if (data.success && data.data?.approvalUrl) {
-        window.location.href = data.data.approvalUrl;
+        window.location.assign(data.data.approvalUrl);
       } else {
         alert(data.error?.message || "Checkout failed");
       }

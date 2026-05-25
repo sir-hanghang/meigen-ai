@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Refund Policy",
-  description: "Refund Policy for Meigen AI.",
+  title: "Meigen AI Refund Policy for Paid Plans Help",
+  description:
+    "Check the Meigen AI refund policy for Pro and Team plans, refund eligibility, non-refundable charges, request steps, and processing timelines.",
 };
 
 export default function RefundPolicy() {
@@ -15,6 +16,12 @@ export default function RefundPolicy() {
         </Link>
         <h1 className="font-[family-name:var(--font-display)] text-4xl md:text-5xl font-semibold mb-8">Refund Policy</h1>
         <p className="text-[#a09b94] mb-12">Last updated: May 12, 2026</p>
+        <p className="text-[#a09b94] leading-relaxed mb-10">
+          Paid plan purchases may qualify for a return when eligibility rules are
+          met, while renewal charges, promotional credits, and terminated accounts
+          have separate limits. Review these billing rules before upgrading your
+          Meigen AI plan.
+        </p>
         <div className="space-y-10 text-[#a09b94] leading-relaxed">
           <section>
             <h2 className="text-xl font-semibold text-[#f5f0e8] mb-4">1. Eligibility</h2>

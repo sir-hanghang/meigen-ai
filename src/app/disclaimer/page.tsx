@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Disclaimer",
-  description: "Disclaimer for Meigen AI.",
+  title: "AI Content Disclaimer for Meigen AI Quotes",
+  description:
+    "Read the AI content disclaimer for Meigen AI quotes, including review responsibilities, professional advice limits, originality, and third-party rights.",
 };
 
 export default function Disclaimer() {
@@ -15,6 +16,14 @@ export default function Disclaimer() {
         </Link>
         <h1 className="font-[family-name:var(--font-display)] text-4xl md:text-5xl font-semibold mb-8">Disclaimer</h1>
         <p className="text-[#a09b94] mb-12">Last updated: May 12, 2026</p>
+        <p className="text-[#a09b94] leading-relaxed mb-10">
+          This AI content disclaimer explains how to review AI-generated quotes,
+          avoid treating generated text as professional advice, and respect
+          third-party rights before publishing Meigen AI quote cards. It also
+          clarifies that users should check tone, claims, attribution, and legal
+          suitability for their own audience before sharing generated material in
+          public or commercial channels.
+        </p>
         <div className="space-y-10 text-[#a09b94] leading-relaxed">
           <section>
             <h2 className="text-xl font-semibold text-[#f5f0e8] mb-4">AI-Generated Content</h2>

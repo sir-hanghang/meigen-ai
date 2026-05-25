@@ -22,16 +22,12 @@ const SIZES = [
   { id: "16:9", name: "Landscape", desc: "Twitter / LinkedIn" },
 ];
 
-const CATEGORIES = ["All", "Minimal", "Editorial", "Bold", "Elegant"];
-
 export default function Hero() {
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [topic, setTopic] = useState("");
   const [templates, setTemplates] = useState<Template[]>([]);
-  const [filteredTemplates, setFilteredTemplates] = useState<Template[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState("minimal-dark");
   const [selectedSize, setSelectedSize] = useState("1:1");
-  const [activeCategory, setActiveCategory] = useState("All");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<{
     quote: string;
@@ -49,20 +45,10 @@ export default function Hero() {
       .then((d) => {
         if (d.success) {
           setTemplates(d.data.templates);
-          setFilteredTemplates(d.data.templates);
         }
       })
       .catch(console.error);
   }, []);
-
-  // Filter templates
-  useEffect(() => {
-    if (activeCategory === "All") {
-      setFilteredTemplates(templates);
-    } else {
-      setFilteredTemplates(templates.filter((t) => t.category === activeCategory));
-    }
-  }, [activeCategory, templates]);
 
   // Render a quote card without changing the generated text.
   const renderQuoteCard = useCallback(async (quote: string, author: string, templateId: string, size: string) => {
@@ -118,23 +104,6 @@ export default function Hero() {
       setStep(2);
       // Trigger credit refresh across the app
       window.dispatchEvent(new Event('credit-used'));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Network error");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Step 2: Render with selected template
-  const handleRender = async () => {
-    if (!result) return;
-    setLoading(true);
-    setError("");
-
-    try {
-      const svg = await renderQuoteCard(result.quote, result.author, selectedTemplate, selectedSize);
-      setResult((prev) => (prev ? { ...prev, svg } : null));
-      setStep(2);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Network error");
     } finally {

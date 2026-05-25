@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy",
+  title: "Meigen AI Privacy Policy for Quote Tools",
   description:
-    "Privacy Policy for Meigen AI. Learn how we collect, use, and protect your personal data.",
+    "Read the Meigen AI privacy policy to learn what data we collect, how quote generation data is used, and how your account information is protected.",
 };
 
 export default function PrivacyPolicy() {
@@ -21,6 +21,12 @@ export default function PrivacyPolicy() {
           Privacy Policy
         </h1>
         <p className="text-[#a09b94] mb-12">Last updated: May 12, 2026</p>
+        <p className="text-[#a09b94] leading-relaxed mb-10">
+          This privacy policy explains how Meigen AI handles account data,
+          generated quote activity, brand assets, analytics, and payment records.
+          The privacy policy is written to help users understand data collection,
+          security practices, and privacy choices before using the service.
+        </p>
 
         <div className="space-y-10 text-[#a09b94] leading-relaxed">
           <section>
